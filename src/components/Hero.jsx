@@ -2,65 +2,63 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import logo from '../assets/images/logo.jpg';
+import logo from '../assets/images/navbar-logo.png';
 
 export default function Hero() {
-    return (
-        <section className="hero">
-            <div className="hero-bg">
-                <div className="gradient-overlay"></div>
-                <div className="grid-pattern"></div>
-            </div>
+  return (
+    <section className="hero">
+      <div className="hero-bg">
+        <div className="gradient-overlay"></div>
+        <div className="grid-pattern"></div>
+      </div>
 
-            <div className="container hero-content">
-                <motion.div
-                    className="hero-text"
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <span className="hero-tag">X1 ZERO QUINZE</span>
-                    <h1 className="hero-title">
-                        O PALCO DOS <br />
-                        <span className="text-gradient">GRANDES DUELOS</span>
-                    </h1>
-                    <p className="hero-description">
-                        O campeonato de X1 mais disputado da região.
-                        Liga de pontos corridos, adrenalina pura e premiação exclusiva.
-                        Você está pronto para o desafio?
-                    </p>
+      <div className="container hero-content">
+        <motion.div
+          className="hero-text"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.div
+            className="hero-image-container"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="logo-glow"></div>
+            <img src={logo} alt="X1 Zero Quinze Logo" className="hero-logo" />
+          </motion.div>
+          <h1 className="hero-title">
+            O PALCO DOS <br />
+            <span className="text-gradient">GRANDES DUELOS</span>
+          </h1>
+          <p className="hero-description">
+            O campeonato de X1 mais disputado da região.
+            Liga de pontos corridos, adrenalina pura e premiação exclusiva.
+            Você está pronto para o desafio?
+          </p>
 
-                    <div className="hero-actions">
-                        <Link to="/portal" className="btn-primary">
-                            Inscrever-se Agora <ChevronRight size={20} />
-                        </Link>
-                        <a href="#about" className="btn-secondary">
-                            Saiba Mais
-                        </a>
-                    </div>
-                </motion.div>
+          <div className="hero-actions">
+            <Link to="/portal" className="btn-primary">
+              Inscrever-se Agora <ChevronRight size={20} />
+            </Link>
+            <a href="#about" className="btn-secondary">
+              Saiba Mais
+            </a>
+          </div>
+        </motion.div>
+      </div>
 
-                <motion.div
-                    className="hero-image-container"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                    <div className="logo-glow"></div>
-                    <img src={logo} alt="X1 Zero Quinze Logo" className="hero-logo" />
-                </motion.div>
-            </div>
-
-            <style>{`
+      <style>{`
         .hero {
           position: relative;
           min-height: 100vh;
           display: flex;
           align-items: center;
-          padding-top: 80px; /* Navbar height */
+          justify-content: center;
+          padding-top: 80px;
           overflow: hidden;
         }
-
         .hero-bg {
           position: absolute;
           inset: 0;
@@ -71,7 +69,7 @@ export default function Hero() {
         .gradient-overlay {
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at top right, rgba(47, 184, 93, 0.15), transparent 60%);
+          background: radial-gradient(circle at center, rgba(47, 184, 93, 0.15), transparent 70%);
         }
 
         .grid-pattern {
@@ -84,14 +82,16 @@ export default function Hero() {
         }
 
         .hero-content {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 3rem;
-          align-items: center;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          text-align: center;
         }
-
         .hero-text {
-          max-width: 600px;
+          max-width: 900px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
 
         .hero-tag {
@@ -102,54 +102,60 @@ export default function Hero() {
           border-radius: 99px;
           font-weight: 600;
           font-size: 0.875rem;
-          margin-bottom: 1.5rem;
+          margin-bottom: 2rem;
           border: 1px solid rgba(47, 184, 93, 0.2);
+          letter-spacing: 0.1em;
         }
 
         .hero-title {
-          font-size: 3rem;
+          font-size: 3.5rem;
           line-height: 1.1;
           font-weight: 900;
-          margin-bottom: 1.5rem;
+          margin-bottom: 2rem;
           text-transform: uppercase;
         }
 
         .hero-description {
-          font-size: 1.125rem;
+          font-size: 1.25rem;
           color: var(--text-muted);
-          margin-bottom: 2rem;
-          max-width: 480px;
+          margin-bottom: 3rem;
+          max-width: 600px;
+          line-height: 1.8;
         }
 
         .hero-actions {
           display: flex;
-          gap: 1rem;
+          gap: 1.5rem;
+          justify-content: center;
           flex-wrap: wrap;
         }
-
+        .hero-logo {
+          width: 300px;
+        }
         .btn-primary {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
           background: var(--color-primary);
           color: var(--color-darker);
-          padding: 1rem 2rem;
+          padding: 1rem 2.5rem;
           border-radius: 0.5rem;
           font-weight: 700;
           font-size: 1.125rem;
           transition: all 0.3s;
+          box-shadow: 0 0 20px rgba(47, 184, 93, 0.3);
         }
 
         .btn-primary:hover {
           transform: translateY(-2px);
-          box-shadow: 0 10px 20px -5px rgba(47, 184, 93, 0.4);
+          box-shadow: 0 10px 30px rgba(47, 184, 93, 0.5);
           background: white;
         }
 
         .btn-secondary {
           display: inline-flex;
           align-items: center;
-          padding: 1rem 2rem;
+          padding: 1rem 2.5rem;
           border-radius: 0.5rem;
           font-weight: 600;
           color: white;
@@ -162,44 +168,12 @@ export default function Hero() {
           border-color: white;
         }
 
-        .hero-image-container {
-          position: relative;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .logo-glow {
-          position: absolute;
-          width: 300px;
-          height: 300px;
-          background: var(--color-primary);
-          filter: blur(100px);
-          opacity: 0.2;
-          border-radius: 50%;
-          z-index: -1;
-        }
-
-        .hero-logo {
-          width: 100%;
-          max-width: 400px;
-          border-radius: 1rem;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-          /* Only apply a border/glow if desired, assuming image is rectangular */
-        }
-
-        @media (min-width: 1024px) {
-          .hero-content {
-            grid-template-columns: 1.2fr 1fr;
-          }
+        @media (min-width: 768px) {
           .hero-title {
-            font-size: 5rem;
-          }
-          .hero-image-container {
-            justify-content: flex-end;
+            font-size: 5.5rem;
           }
         }
       `}</style>
-        </section>
-    );
+    </section>
+  );
 }

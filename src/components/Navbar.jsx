@@ -1,43 +1,77 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X, Trophy } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, X, LogOut, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import navbarLogo from '../assets/images/navbar-logo.png';
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth(); // Safe usage inside AuthProvider
+  const navigate = useNavigate();
 
-    const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = () => setIsOpen(!isOpen);
 
-    return (
-        <nav className="navbar">
-            <div className="container navbar-container">
-                <Link to="/" className="logo">
-                    <Trophy className="logo-icon" />
-                    <span className="logo-text">X1 <span className="text-highlight">ZERO QUINZE</span></span>
-                </Link>
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    setIsOpen(false);
+  };
 
-                {/* Desktop Menu */}
-                <div className="desktop-menu">
-                    <a href="/#about" className="nav-link">O Campeonato</a>
-                    <a href="/#gallery" className="nav-link">Galeria</a>
-                    <Link to="/portal" className="nav-link portal-link">Portal do Atleta</Link>
-                </div>
+  return (
+    <nav className="navbar">
+      <div className="container navbar-container">
+        <Link to="/" className="logo">
+          <img src={navbarLogo} alt="X1 Zero Quinze Logo" className="logo-icon-img" />
+          <span className="logo-text">X1 <span className="text-highlight">ZERO QUINZE</span></span>
+        </Link>
 
-                {/* Mobile Toggle */}
-                <button className="mobile-toggle" onClick={toggleMenu}>
-                    {isOpen ? <X size={28} /> : <Menu size={28} />}
-                </button>
+        {/* Desktop Menu */}
+        <div className="desktop-menu">
+          <a href="/#about" className="nav-link">O Campeonato</a>
+          <a href="/#gallery" className="nav-link">Galeria</a>
 
-                {/* Mobile Menu */}
-                {isOpen && (
-                    <div className="mobile-menu">
-                        <a href="/#about" className="mobile-link" onClick={toggleMenu}>O Campeonato</a>
-                        <a href="/#gallery" className="mobile-link" onClick={toggleMenu}>Galeria</a>
-                        <Link to="/portal" className="mobile-link portal-link-mobile" onClick={toggleMenu}>Portal do Atleta</Link>
-                    </div>
-                )}
+          {isAuthenticated ? (
+            <div className="auth-menu">
+              <Link to="/portal" className="nav-link portal-link">
+                <User size={18} /> Portal
+              </Link>
+              <button onClick={handleLogout} className="logout-btn" title="Sair">
+                <LogOut size={18} />
+              </button>
             </div>
+          ) : (
+            <Link to="/login" className="nav-link portal-link">Login</Link>
+          )}
+        </div>
 
-            <style>{`
+        {/* Mobile Toggle */}
+        <button className="mobile-toggle" onClick={toggleMenu}>
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div className="mobile-menu">
+            <a href="/#about" className="mobile-link" onClick={toggleMenu}>O Campeonato</a>
+            <a href="/#gallery" className="mobile-link" onClick={toggleMenu}>Galeria</a>
+
+            {isAuthenticated ? (
+              <>
+                <Link to="/portal" className="mobile-link portal-link-mobile" onClick={toggleMenu}>
+                  Portal do Atleta
+                </Link>
+                <button onClick={handleLogout} className="mobile-link logout-mobile">
+                  Sair <LogOut size={18} />
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="mobile-link portal-link-mobile" onClick={toggleMenu}>Login / Inscrever-se</Link>
+            )}
+          </div>
+        )}
+      </div>
+
+      <style>{`
         .navbar {
           position: fixed;
           top: 0;
@@ -66,9 +100,11 @@ export default function Navbar() {
           text-transform: uppercase;
           letter-spacing: -0.02em;
         }
-
-        .logo-icon {
-          color: var(--color-primary);
+        
+        .logo-icon-img {
+          height: 48px;
+          border-radius: 6px;
+          object-fit: contain;
         }
 
         .text-highlight {
@@ -99,12 +135,31 @@ export default function Navbar() {
           border-radius: 99px;
           font-weight: 700;
           transition: transform 0.2s, background 0.3s;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
 
         .portal-link:hover {
           background: white;
           transform: translateY(-2px);
           color: var(--color-primary);
+        }
+
+        .auth-menu {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .logout-btn {
+          background: transparent;
+          color: var(--text-muted);
+          transition: 0.3s;
+        }
+        
+        .logout-btn:hover {
+          color: #ef4444; /* Red for logout */
         }
 
         .mobile-toggle {
@@ -137,6 +192,18 @@ export default function Navbar() {
           color: var(--color-primary);
         }
 
+        .logout-mobile {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: #ef4444;
+          background: transparent;
+          font-size: 1.25rem;
+          font-weight: 600;
+          text-align: left;
+          padding: 0;
+        }
+
         @keyframes slideDown {
           from { opacity: 0; transform: translateY(-10px); }
           to { opacity: 1; transform: translateY(0); }
@@ -151,6 +218,6 @@ export default function Navbar() {
           }
         }
       `}</style>
-        </nav>
-    );
+    </nav>
+  );
 }

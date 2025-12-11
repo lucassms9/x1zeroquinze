@@ -1,17 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap');
 
 :root {
-  --color-primary: #2FB85D; /* Sporty Green */
+  --color-primary: #2FB85D;
+  /* Sporty Green */
   --color-primary-dark: #1E8240;
-  --color-accent: #E8E8E8; /* Silver/White */
-  --color-dark: #0F172A; /* Deep Navy/Black */
-  --color-darker: #020617; /* Almost Black */
+  --color-accent: #E8E8E8;
+  /* Silver/White */
+  --color-dark: #0F172A;
+  /* Deep Navy/Black */
+  --color-darker: #020617;
+  /* Almost Black */
   --color-card: #1E293B;
   --text-main: #F1F5F9;
   --text-muted: #94A3B8;
-  
+
   --font-main: 'Outfit', sans-serif;
-  
+
   --radius: 0.5rem;
   --shadow-glow: 0 0 20px rgba(47, 184, 93, 0.5);
 }
@@ -45,13 +49,16 @@ button {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--color-darker);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--color-primary);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary-dark);
 }
@@ -65,5 +72,6 @@ button {
 .text-gradient {
   background: linear-gradient(to right, var(--color-primary), #fff);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }

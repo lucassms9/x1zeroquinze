@@ -1,144 +1,272 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { UserPlus, Trophy, Users, BarChart2 } from 'lucide-react';
+import {
+  UserPlus, Trophy, Users, BarChart2, LayoutDashboard,
+  Calendar, CheckCircle, Clock, ChevronRight
+} from 'lucide-react';
 import { motion } from 'framer-motion';
+import { leagueInfo, athletes, matches } from '../data/mockData';
 
 export default function PortalPage() {
-    const [activeTab, setActiveTab] = useState('inscricao');
+  const [activeTab, setActiveTab] = useState('geral');
 
-    return (
-        <div className="portal-page">
-            <Navbar />
+  // Calculate Standings dynamically
+  const standings = [...athletes].sort((a, b) => {
+    if (b.stats.points !== a.stats.points) return b.stats.points - a.stats.points;
+    if (b.stats.wins !== a.stats.wins) return b.stats.wins - a.stats.wins;
+    return (b.stats.goalsFor - b.stats.goalsAgainst) - (a.stats.goalsFor - a.stats.goalsAgainst);
+  });
 
-            <main className="portal-main">
-                <div className="container portal-container">
-                    {/* Sidebar / Tabs */}
-                    <div className="portal-sidebar">
-                        <div className="sidebar-header">
-                            <h2>PAINEL DO ATLETA</h2>
-                        </div>
+  const nextMatch = matches.find(m => m.status === 'Agendado');
 
-                        <nav className="sidebar-nav">
-                            <button
-                                className={`sidebar-link ${activeTab === 'inscricao' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('inscricao')}
-                            >
-                                <UserPlus size={20} /> Inscrição
-                            </button>
-                            <button
-                                className={`sidebar-link ${activeTab === 'classificacao' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('classificacao')}
-                            >
-                                <Trophy size={20} /> Classificação
-                            </button>
-                            <button
-                                className={`sidebar-link ${activeTab === 'jogos' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('jogos')}
-                            >
-                                <BarChart2 size={20} /> Jogos & Resultados
-                            </button>
-                            <button
-                                className={`sidebar-link ${activeTab === 'equipes' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('equipes')}
-                            >
-                                <Users size={20} /> Equipes
-                            </button>
-                        </nav>
-                    </div>
+  return (
+    <div className="portal-page">
+      <Navbar />
 
-                    {/* Content Area */}
-                    <div className="portal-content">
-                        {activeTab === 'inscricao' && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="content-card"
-                            >
-                                <h2 className="card-title">Nova Inscrição</h2>
-                                <p className="card-subtitle">Preencha os dados abaixo para garantir sua vaga na próxima temporada.</p>
+      <main className="portal-main">
+        <div className="container portal-container">
+          {/* Sidebar */}
+          <div className="portal-sidebar">
+            <div className="sidebar-header">
+              <h2>PAINEL DO ATLETA</h2>
+              <span className="season-badge">{leagueInfo.season}</span>
+            </div>
 
-                                <form className="registration-form" onSubmit={(e) => e.preventDefault()}>
-                                    <div className="form-group">
-                                        <label>Nome Completo</label>
-                                        <input type="text" placeholder="Seu nome" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Nome da Equipe / Apelido</label>
-                                        <input type="text" placeholder="Como você quer ser chamado" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>WhatsApp</label>
-                                        <input type="tel" placeholder="(15) 99999-9999" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Posição Principal</label>
-                                        <select>
-                                            <option>Linha</option>
-                                            <option>Goleiro</option>
-                                        </select>
-                                    </div>
-                                    <button type="submit" className="submit-btn">Realizar Pré-Inscrição</button>
-                                </form>
-                            </motion.div>
-                        )}
+            <nav className="sidebar-nav">
+              <button
+                className={`sidebar-link ${activeTab === 'geral' ? 'active' : ''}`}
+                onClick={() => setActiveTab('geral')}
+              >
+                <LayoutDashboard size={20} /> Visão Geral
+              </button>
+              <button
+                className={`sidebar-link ${activeTab === 'classificacao' ? 'active' : ''}`}
+                onClick={() => setActiveTab('classificacao')}
+              >
+                <Trophy size={20} /> Classificação
+              </button>
+              <button
+                className={`sidebar-link ${activeTab === 'jogos' ? 'active' : ''}`}
+                onClick={() => setActiveTab('jogos')}
+              >
+                <Calendar size={20} /> Jogos & Resultados
+              </button>
+              <button
+                className={`sidebar-link ${activeTab === 'atletas' ? 'active' : ''}`}
+                onClick={() => setActiveTab('atletas')}
+              >
+                <Users size={20} /> Equipes & Atletas
+              </button>
+              <button
+                className={`sidebar-link ${activeTab === 'inscricao' ? 'active' : ''}`}
+                onClick={() => setActiveTab('inscricao')}
+              >
+                <UserPlus size={20} /> Nova Inscrição
+              </button>
+            </nav>
+          </div>
 
-                        {activeTab === 'classificacao' && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="content-card"
-                            >
-                                <h2 className="card-title">Tabela de Classificação</h2>
-                                <div className="table-responsive">
-                                    <table className="classification-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Pos</th>
-                                                <th>Atleta</th>
-                                                <th>P</th>
-                                                <th>J</th>
-                                                <th>V</th>
-                                                <th>D</th>
-                                                <th>SG</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {[1, 2, 3, 4, 5].map((pos) => (
-                                                <tr key={pos}>
-                                                    <td className="rank">{pos}º</td>
-                                                    <td className="athlete">Atleta {pos}</td>
-                                                    <td className="points">{18 - pos * 3}</td>
-                                                    <td>6</td>
-                                                    <td>{6 - pos}</td>
-                                                    <td>{pos}</td>
-                                                    <td>{10 - pos * 2}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </motion.div>
-                        )}
+          {/* Content Area */}
+          <div className="portal-content">
 
-                        {(activeTab === 'jogos' || activeTab === 'equipes') && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="content-card empty-state"
-                            >
-                                <BarChart2 size={48} className="empty-icon" />
-                                <h3>Em Breve</h3>
-                                <p>Esta seção estará disponível no início do campeonato.</p>
-                            </motion.div>
-                        )}
-                    </div>
+            {/* --- VISÃO GERAL --- */}
+            {activeTab === 'geral' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="dashboard-grid">
+
+                {/* Status Card */}
+                <div className="dashboard-card status-card">
+                  <h3>Status da Liga</h3>
+                  <div className="status-indicator">
+                    <span className="pulse"></span>
+                    {leagueInfo.status}
+                  </div>
+                  <div className="round-info">Rodada Atual: {leagueInfo.nextRound} de {leagueInfo.totalRounds}</div>
                 </div>
-            </main>
 
-            <Footer />
+                {/* Prizes Card */}
+                <div className="dashboard-card prize-card">
+                  <h3>Premiação</h3>
+                  <div className="prize-list">
+                    <div className="prize-item">
+                      <Trophy size={16} className="gold" />
+                      <span>1º Lugar:</span> <strong>{leagueInfo.championPrize}</strong>
+                    </div>
+                    <div className="prize-item">
+                      <Trophy size={16} className="silver" />
+                      <span>2º Lugar:</span> <strong>{leagueInfo.vicePrize}</strong>
+                    </div>
+                  </div>
+                </div>
 
-            <style>{`
+                {/* Next Match Highlight */}
+                {nextMatch && (
+                  <div className="dashboard-card next-match-card">
+                    <h3>Próximo Jogo Principal</h3>
+                    <div className="match-highlight">
+                      <div className="team-home">
+                        <span className="team-name">{athletes.find(a => a.id === nextMatch.player1Id)?.nickname}</span>
+                      </div>
+                      <div className="vs">VS</div>
+                      <div className="team-away">
+                        <span className="team-name">{athletes.find(a => a.id === nextMatch.player2Id)?.nickname}</span>
+                      </div>
+                    </div>
+                    <div className="match-footer">
+                      <Clock size={14} /> {nextMatch.date} • {nextMatch.location}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* --- CLASSIFICAÇÃO --- */}
+            {activeTab === 'classificacao' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="content-card">
+                <h2 className="card-title">Tabela de Classificação</h2>
+                <div className="table-responsive">
+                  <table className="classification-table">
+                    <thead>
+                      <tr>
+                        <th>Pos</th>
+                        <th>Atleta</th>
+                        <th>P</th>
+                        <th>J</th>
+                        <th>V</th>
+                        <th>D</th>
+                        <th>GP</th>
+                        <th>GC</th>
+                        <th>SG</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {standings.map((athlete, index) => (
+                        <tr key={athlete.id} className={index < 3 ? 'top-rank' : ''}>
+                          <td className="rank">{index + 1}º</td>
+                          <td className="athlete">
+                            <span className="athlete-name">{athlete.nickname}</span>
+                            <span className="athlete-team">{athlete.team}</span>
+                          </td>
+                          <td className="points">{athlete.stats.points}</td>
+                          <td>{athlete.stats.matches}</td>
+                          <td>{athlete.stats.wins}</td>
+                          <td>{athlete.stats.losses}</td>
+                          <td>{athlete.stats.goalsFor}</td>
+                          <td>{athlete.stats.goalsAgainst}</td>
+                          <td>{athlete.stats.goalsFor - athlete.stats.goalsAgainst}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </motion.div>
+            )}
+
+            {/* --- JOGOS --- */}
+            {activeTab === 'jogos' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="games-list">
+                <h2 className="section-title-small">Partidas Recentes & Agendadas</h2>
+                {matches.map((match) => {
+                  const p1 = athletes.find(a => a.id === match.player1Id);
+                  const p2 = athletes.find(a => a.id === match.player2Id);
+                  return (
+                    <div key={match.id} className="match-card">
+                      <div className="match-header">
+                        <span className="match-round">Rodada {match.round}</span>
+                        <span className={`match-status ${match.status.toLowerCase()}`}>{match.status}</span>
+                      </div>
+                      <div className="match-content">
+                        <div className="player player-home">
+                          <span className="p-name">{p1?.nickname}</span>
+                        </div>
+                        <div className="score-board">
+                          {match.status === 'Finalizado' ? (
+                            <>
+                              <span className="score">{match.score1}</span>
+                              <span className="divider">-</span>
+                              <span className="score">{match.score2}</span>
+                            </>
+                          ) : (
+                            <span className="vs-badge">VS</span>
+                          )}
+                        </div>
+                        <div className="player player-away">
+                          <span className="p-name">{p2?.nickname}</span>
+                        </div>
+                      </div>
+                      <div className="match-info">
+                        {match.date} • {match.location}
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
+            )}
+
+            {/* --- ATLETAS --- */}
+            {activeTab === 'atletas' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="athletes-grid">
+                {athletes.map((athlete) => (
+                  <div key={athlete.id} className="athlete-card">
+                    <div className="athlete-header">
+                      <div className="athlete-avatar-placeholder">
+                        {athlete.nickname.charAt(0)}
+                      </div>
+                      <div className="athlete-info">
+                        <h4>{athlete.nickname}</h4>
+                        <span>{athlete.team}</span>
+                      </div>
+                    </div>
+                    <div className="athlete-stats">
+                      <div className="stat">
+                        <label>Jogos</label>
+                        <span>{athlete.stats.matches}</span>
+                      </div>
+                      <div className="stat">
+                        <label>Gols</label>
+                        <span>{athlete.stats.goalsFor}</span>
+                      </div>
+                      <div className="stat">
+                        <label>Vitórias</label>
+                        <span>{athlete.stats.wins}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+
+            {/* --- INSCRIÇÃO --- */}
+            {activeTab === 'inscricao' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="content-card">
+                <h2 className="card-title">Nova Inscrição</h2>
+                <p className="card-subtitle">Pré-inscrição para a próxima temporada.</p>
+                <form className="registration-form" onSubmit={(e) => e.preventDefault()}>
+                  {/* Keep existing form fields */}
+                  <div className="form-group">
+                    <label>Nome Completo</label>
+                    <input type="text" placeholder="Seu nome" />
+                  </div>
+                  <div className="form-group">
+                    <label>Nome da Equipe</label>
+                    <input type="text" placeholder="Nome do time" />
+                  </div>
+                  <div className="form-group">
+                    <label>WhatsApp</label>
+                    <input type="tel" placeholder="(15) 99999-9999" />
+                  </div>
+                  <button type="submit" className="submit-btn">Enviar Pré-Inscrição</button>
+                </form>
+              </motion.div>
+            )}
+
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+
+      <style>{`
         .portal-page {
           min-height: 100vh;
           background-color: var(--color-darker);
@@ -148,7 +276,7 @@ export default function PortalPage() {
 
         .portal-main {
           flex: 1;
-          padding-top: 120px; /* Navbar + spacing */
+          padding-top: 120px;
           padding-bottom: 4rem;
         }
 
@@ -165,20 +293,37 @@ export default function PortalPage() {
           }
         }
 
+        /* Sidebar */
         .portal-sidebar {
           background: var(--color-card);
           border-radius: 1rem;
           padding: 1.5rem;
           border: 1px solid rgba(255, 255, 255, 0.05);
+          position: sticky;
+          top: 100px;
+        }
+
+        .sidebar-header {
+          margin-bottom: 2rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-header h2 {
           font-size: 1.25rem;
           font-weight: 700;
           color: white;
-          margin-bottom: 1.5rem;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          margin-bottom: 0.5rem;
+        }
+
+        .season-badge {
+          display: inline-block;
+          background: rgba(47, 184, 93, 0.1);
+          color: var(--color-primary);
+          padding: 0.25rem 0.75rem;
+          border-radius: 99px;
+          font-size: 0.75rem;
+          font-weight: 600;
         }
 
         .sidebar-nav {
@@ -212,6 +357,113 @@ export default function PortalPage() {
           font-weight: 700;
         }
 
+        /* Dashboard Overview */
+        .dashboard-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .dashboard-card {
+          background: var(--color-card);
+          padding: 1.5rem;
+          border-radius: 1rem;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dashboard-card h3 {
+          color: var(--text-muted);
+          font-size: 0.875rem;
+          text-transform: uppercase;
+          margin-bottom: 1rem;
+          letter-spacing: 0.05em;
+        }
+
+        .status-indicator {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--color-primary);
+          font-weight: 700;
+          font-size: 1.25rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .pulse {
+          width: 8px;
+          height: 8px;
+          background: var(--color-primary);
+          border-radius: 50%;
+          box-shadow: 0 0 0 rgba(47, 184, 93, 0.4);
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 rgba(47, 184, 93, 0.4); }
+          70% { box-shadow: 0 0 0 10px rgba(47, 184, 93, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(47, 184, 93, 0); }
+        }
+
+        .round-info {
+          font-size: 0.875rem;
+          color: white;
+        }
+
+        .prize-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .prize-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: white;
+          font-size: 0.9rem;
+        }
+
+        .gold { color: #FFD700; }
+        .silver { color: #C0C0C0; }
+
+        .next-match-card {
+          grid-column: 1 / -1;
+          background: linear-gradient(to right, var(--color-card), #1e293b);
+        }
+
+        .match-highlight {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin: 1.5rem 0;
+          font-weight: 700;
+          font-size: 1.25rem;
+        }
+
+        .team-home, .team-away {
+          flex: 1;
+          color: white;
+        }
+        
+        .team-away { text-align: right; }
+
+        .vs {
+          color: var(--text-muted);
+          font-size: 0.875rem;
+          padding: 0 1rem;
+        }
+
+        .match-footer {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.875rem;
+          color: var(--text-muted);
+          border-top: 1px solid rgba(255,255,255,0.05);
+          padding-top: 1rem;
+        }
+
+        /* Classification Table */
         .content-card {
           background: var(--color-card);
           border-radius: 1rem;
@@ -219,69 +471,11 @@ export default function PortalPage() {
           border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .card-title {
-          font-size: 1.75rem;
-          font-weight: 700;
-          color: white;
-          margin-bottom: 0.5rem;
-        }
-
-        .card-subtitle {
-          color: var(--text-muted);
-          margin-bottom: 2rem;
-        }
-
-        .form-group {
-          margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-          display: block;
-          color: white;
-          margin-bottom: 0.5rem;
-          font-weight: 500;
-        }
-
-        .form-group input, .form-group select {
-          width: 100%;
-          padding: 1rem;
-          background: rgba(0, 0, 0, 0.2);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 0.5rem;
-          color: white;
-          font-family: inherit;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-          outline: none;
-          border-color: var(--color-primary);
-        }
-
-        .submit-btn {
-          width: 100%;
-          padding: 1rem;
-          background: var(--color-primary);
-          color: var(--color-darker);
-          font-weight: 700;
-          border-radius: 0.5rem;
-          font-size: 1.125rem;
-          transition: 0.3s;
-        }
-
-        .submit-btn:hover {
-          opacity: 0.9;
-          transform: translateY(-1px);
-        }
-
-        /* Table */
-        .table-responsive {
-          overflow-x: auto;
-        }
-
         .classification-table {
           width: 100%;
           border-collapse: collapse;
           color: var(--text-muted);
+          white-space: nowrap;
         }
 
         .classification-table th {
@@ -289,6 +483,7 @@ export default function PortalPage() {
           padding: 1rem;
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           color: white;
+          font-size: 0.875rem;
         }
 
         .classification-table td {
@@ -296,31 +491,150 @@ export default function PortalPage() {
           border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .rank {
-          font-weight: 700;
-          color: var(--color-primary);
-        }
+        .top-rank .rank { color: var(--color-primary); }
+        .athlete-name { display: block; color: white; font-weight: 600; }
+        .athlete-team { display: block; font-size: 0.75rem; }
+        .points { color: white; font-weight: 700; }
 
-        .points {
-          font-weight: 700;
-          color: white;
-        }
-
-        .empty-state {
-          text-align: center;
-          padding: 4rem 2rem;
+        /* Games List */
+        .games-list {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          justify-content: center;
+          gap: 1rem;
         }
 
-        .empty-icon {
-          color: var(--color-primary);
-          margin-bottom: 1rem;
-          opacity: 0.5;
+        .match-card {
+          background: var(--color-card);
+          border-radius: 0.75rem;
+          padding: 1.5rem;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          display: grid;
+          gap: 1rem;
         }
+
+        .match-header {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.875rem;
+        }
+
+        .match-round { color: var(--text-muted); }
+        .match-status { font-weight: 600; }
+        .match-status.agendado { color: gold; }
+        .match-status.finalizado { color: var(--color-primary); }
+
+        .match-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-weight: 700;
+          color: white;
+          font-size: 1.125rem;
+        }
+
+        .score-board {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          background: rgba(0,0,0,0.3);
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+        }
+
+        .vs-badge { 
+          font-size: 0.875rem; 
+          color: var(--text-muted); 
+          font-weight: 600;
+        }
+
+        .match-info {
+          font-size: 0.875rem;
+          color: var(--text-muted);
+          text-align: center;
+          border-top: 1px solid rgba(255,255,255,0.05);
+          padding-top: 0.75rem;
+        }
+
+        /* Athletes Grid */
+        .athletes-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .athlete-card {
+          background: var(--color-card);
+          border-radius: 0.75rem;
+          padding: 1.5rem;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          transition: transform 0.2s;
+        }
+
+        .athlete-card:hover {
+          transform: translateY(-5px);
+          border-color: var(--color-primary);
+        }
+
+        .athlete-header {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .athlete-avatar-placeholder {
+          width: 48px;
+          height: 48px;
+          background: var(--color-primary);
+          color: var(--color-darker);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 1.25rem;
+        }
+
+        .athlete-info h4 { color: white; margin-bottom: 0.25rem; }
+        .athlete-info span { color: var(--text-muted); font-size: 0.875rem; }
+
+        .athlete-stats {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 0.5rem;
+          text-align: center;
+        }
+
+        .stat label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+        .stat span { color: white; font-weight: 700; }
+
+        /* Forms and Common */
+        .card-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: white;
+          margin-bottom: 0.5rem;
+        }
+        .card-subtitle { margin-bottom: 2rem; color: var(--text-muted); }
+        
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; color: white; margin-bottom: 0.5rem; }
+        .form-group input { 
+          width: 100%; padding: 1rem; 
+          background: rgba(0,0,0,0.2); 
+          border: 1px solid rgba(255,255,255,0.1); 
+          color: white; border-radius: 0.5rem;
+        }
+        .submit-btn {
+          width: 100%; padding: 1rem;
+          background: var(--color-primary);
+          color: var(--color-darker);
+          font-weight: 700;
+          border-radius: 0.5rem;
+        }
+
+        .table-responsive { overflow-x: auto; }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }
