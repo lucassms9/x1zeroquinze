@@ -297,16 +297,52 @@ export default function PortalPage() {
         .portal-sidebar {
           background: var(--color-card);
           border-radius: 1rem;
-          padding: 1.5rem;
+          padding: 1rem;
           border: 1px solid rgba(255, 255, 255, 0.05);
           position: sticky;
-          top: 100px;
+          top: 85px; /* Just below navbar */
+          z-index: 20;
+          margin-bottom: 1.5rem;
+          overflow-x: auto;
+          white-space: nowrap;
+          -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+          scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        
+        .portal-sidebar::-webkit-scrollbar {
+          display: none; /* Hide scrollbar Chrome/Safari */
         }
 
         .sidebar-header {
-          margin-bottom: 2rem;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+           display: none; /* Hide header Title on mobile to save space */
+        }
+
+        .sidebar-nav {
+          display: flex;
+          flex-direction: row;
+          gap: 0.75rem;
+        }
+
+        @media (min-width: 900px) {
+            .portal-sidebar {
+              padding: 1.5rem;
+              top: 100px;
+              margin-bottom: 0;
+              overflow-x: visible;
+              white-space: normal;
+            }
+
+            .sidebar-header {
+              display: block; /* Show header on Desktop */
+              margin-bottom: 2rem;
+              padding-bottom: 1rem;
+              border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .sidebar-nav {
+              flex-direction: column;
+              gap: 0.5rem;
+            }
         }
 
         .sidebar-header h2 {
@@ -326,11 +362,7 @@ export default function PortalPage() {
           font-weight: 600;
         }
 
-        .sidebar-nav {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+
 
         .sidebar-link {
           display: flex;
