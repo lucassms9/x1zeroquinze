@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut, User } from 'lucide-react';
+import { Menu, X, LogOut, User, Trophy } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import navbarLogo from '../assets/images/navbar-logo.png';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +20,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="container navbar-container">
         <Link to="/" className="logo">
-          <img src={navbarLogo} alt="X1 Zero Quinze Logo" className="logo-icon-img" />
+          <Trophy size={32} className="logo-icon" />
           <span className="logo-text">X1 <span className="text-highlight">ZERO QUINZE</span></span>
         </Link>
 
@@ -101,10 +100,8 @@ export default function Navbar() {
           letter-spacing: -0.02em;
         }
         
-        .logo-icon-img {
-          height: 48px;
-          border-radius: 6px;
-          object-fit: contain;
+        .logo-icon {
+          color: var(--color-primary);
         }
 
         .text-highlight {
